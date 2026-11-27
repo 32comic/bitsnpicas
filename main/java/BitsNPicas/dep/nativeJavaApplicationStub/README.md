@@ -36,6 +36,8 @@ The built binary is `dep/nativeJavaApplicationStub/nativeJavaApplicationStub` (s
 
 Requires **Clang + macOS SDK** (needed for `.app` targets / `make all` on Mac). Jar-only targets do not need Clang.
 
+Apple Silicon–only package (no x86_64 slice): `make STUB_ARCH=arm64 BitsNPicas.app`
+
 ## Exit codes
 
 | Code | Meaning |

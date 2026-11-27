@@ -42,8 +42,18 @@ eclipseclean:
 		dep/nativeJavaApplicationStub/nativeJavaApplicationStub-x86_64 \
 		dep/nativeJavaApplicationStub/nativeJavaApplicationStub-arm64
 
+# Stub architecture: universal (default) or arm64-only (Apple Silicon packaging).
+#   make STUB_ARCH=arm64 BitsNPicas-MacOS11.0.app
+STUB_ARCH ?= universal
+
 # Built binary lives inside the source dir (cannot share the path name with the directory).
 dep/nativeJavaApplicationStub/nativeJavaApplicationStub: dep/nativeJavaApplicationStub/nativeJavaApplicationStub.c
+ifeq ($(STUB_ARCH),arm64)
+	clang -O2 -target arm64-apple-macos11.0 \
+		-framework CoreFoundation \
+		-o dep/nativeJavaApplicationStub/nativeJavaApplicationStub \
+		dep/nativeJavaApplicationStub/nativeJavaApplicationStub.c
+else
 	clang -O2 -target x86_64-apple-macos10.15 \
 		-framework CoreFoundation \
 		-o dep/nativeJavaApplicationStub/nativeJavaApplicationStub-x86_64 \
@@ -58,6 +68,7 @@ dep/nativeJavaApplicationStub/nativeJavaApplicationStub: dep/nativeJavaApplicati
 		dep/nativeJavaApplicationStub/nativeJavaApplicationStub-arm64
 	rm -f dep/nativeJavaApplicationStub/nativeJavaApplicationStub-x86_64 \
 		dep/nativeJavaApplicationStub/nativeJavaApplicationStub-arm64
+endif
 	chmod +x dep/nativeJavaApplicationStub/nativeJavaApplicationStub
 
 bin: src
